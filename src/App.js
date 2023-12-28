@@ -2,8 +2,9 @@ import logo from "./logo.svg";
 import "./App.css";
 import { TypingLesson } from "./components/TypingLesson";
 const dummyLesson = {
-  title: "Lesson 1",
-  text: "This is the first lesson",
+  title: "Beginner 1",
+  subtitle: "Introduction",
+  text: "This ",
 };
 function App() {
   return (

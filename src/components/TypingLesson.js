@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
+import { levels, lessons } from "../data/lessonsData";
+export const TypingLesson = ({ lessonbb }) => {
+  const [selectedLevel, setSelectedLevel] = useState(levels[0]);
 
-export const TypingLesson = ({ lesson }) => {
   const [userInput, setUserInput] = useState("");
   const [mistakes, setMistakes] = useState(0);
   const [startTime, setStartTime] = useState(null);
@@ -8,6 +10,13 @@ export const TypingLesson = ({ lesson }) => {
   const [isLessonComplete, setIsLessonCompleted] = useState(false);
   const resetButtonRef = useRef(null);
   const textAreaRef = useRef(null);
+
+  const getRandomLessonInLevel = () => {
+    const levelLessons = lessons[selectedLevel].lessons;
+    const randomIndex = Math.floor(Math.random() * levelLessons.length);
+    return levelLessons[randomIndex];
+  };
+  const [lesson, setLesson] = useState(getRandomLessonInLevel());
 
   useEffect(() => {
     if (startTime && endTime) {
@@ -22,6 +31,14 @@ export const TypingLesson = ({ lesson }) => {
       setEndTime(new Date());
     }
   }, [userInput, lesson.text]);
+  useEffect(() => {
+    setUserInput("");
+    setMistakes(0);
+    setStartTime(null);
+    setEndTime(null);
+    setIsLessonCompleted(false);
+    setLesson(getRandomLessonInLevel());
+  }, [selectedLevel]);
 
   useEffect(() => {
     if (isLessonComplete) {
@@ -62,6 +79,21 @@ export const TypingLesson = ({ lesson }) => {
 
   return (
     <div className="max-w-md mx-auto mt-8 p-4 bg-white rounded shadow-lg">
+      <div className="mb-4">
+        {levels.map((level) => (
+          <button
+            key={level}
+            className={`mr-2 px-4 py-2 ${
+              selectedLevel === level ? "bg-blue-500 text-white" : "bg-gray-300"
+            } rounded`}
+            onClick={() => {
+              setSelectedLevel(level);
+            }}
+          >
+            {level}
+          </button>
+        ))}
+      </div>
       <h2 className="text-2xl font-semibold mb-4">{lesson.title}</h2>
       <div className="mb-4">
         {lesson.text.split("").map((char, index) => (
